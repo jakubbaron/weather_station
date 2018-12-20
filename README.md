@@ -1,4 +1,4 @@
-##Overview 
+## Overview 
 
 This is a Weather station project with the use of RaspberryPi  
 It's going to monitor room temperature and humidity as well, storing it in the
@@ -9,3 +9,8 @@ statistics
 Used technologies:
 -Docker
 -Redis
+
+## Installation 
+sh configuration.sh;
+sh docker_redis.sh;
+sh redis_python.sh;
