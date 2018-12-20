@@ -27,3 +27,7 @@ docker run --name redis -v ~/redis/redis.conf:/usr/local/etc/redis/redis.conf -d
 # local redis.conf and issuing
 # docker restart redis
 
+# If you want to stop redis
+# docker stop redis
+# Remove redis container:
+# docker stop redis; docker rm redis
