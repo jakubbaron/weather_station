@@ -7,10 +7,10 @@ Then we can use these dumps to plot some graphs and provide historical
 statistics  
   
 Used technologies:
--Docker
--Redis
+* Docker
+* Redis
 
 ## Installation 
-sh configuration.sh;
-sh docker_redis.sh;
-sh redis_python.sh;
+sh configuration.sh;  
+sh docker_redis.sh;  
+sh redis_python.sh;  
