@@ -11,6 +11,4 @@ Used technologies:
 * Redis
 
 ## Installation 
-sh configuration.sh;  
-sh docker_redis.sh;  
-sh redis_python.sh;  
+sh ./configuration/install.sh;  
