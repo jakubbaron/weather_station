@@ -6,9 +6,16 @@ import sys
 
 import redis
 
-import time
+import sched, time
 import Adafruit_DHT
 
+SENSOR = Adafruit_DHT.DHT11
+GPIO = 4
+MEASUREMENTS_COUNT = 50
+STREAM = "DHT11-stream"
+MAXLEN = 150000
+
+SCHEDULER = sched.scheduler(time.time, time.sleep)
 
 def get_average(measurements):
     return str(sum(measurements)/float(len(measurements)))
@@ -22,27 +29,27 @@ def get_redis_passwd():
 
     return redis_passwd
 
+def get_readings(scheduler, r):
+    scheduler.enter(60, 0, get_readings, (scheduler, r,))
+
+    humidities = []
+    temperatures = []
+
+    for _ in range(MEASUREMENTS_COUNT):
+        humidity, temperature = Adafruit_DHT.read_retry(SENSOR, GPIO)
+        humidities.append(humidity)
+        temperatures.append(temperature)
+
+    data = {}
+    data['date'] = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+    data['temperature'] = get_average(temperatures)
+    data['humidity'] = get_average(humidities)
+    r.xadd(STREAM, data, maxlen=MAXLEN)
+    
 
 if __name__ == '__main__':
-    SENSOR = Adafruit_DHT.DHT11
-    GPIO = 4
-    MEASUREMENTS_COUNT = 60
-    STREAM="DHT11-stream"
-    MAXLEN=150000
 
     r=redis.StrictRedis(host='localhost', port=6379, db=0, password=get_redis_passwd(), socket_timeout=None, connection_pool=None, charset='utf-8', errors='strict', unix_socket_path=None)
 
-    while True:
-        date = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
-        humidities = []
-        temperatures = []
-        for _ in range(MEASUREMENTS_COUNT):
-            humidity, temperature = Adafruit_DHT.read_retry(SENSOR, GPIO)
-            humidities.append(humidity)
-            temperatures.append(temperature)
-
-        data = {}
-        data['date'] = date
-        data['temperature'] = get_average(temperatures)
-        data['humidity'] = get_average(humidities)
-        r.xadd(STREAM, data, maxlen=MAXLEN)
+    SCHEDULER.enter(60, 0, get_readings, (SCHEDULER, r,))
+    SCHEDULER.run()
