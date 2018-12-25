@@ -44,6 +44,7 @@ def get_readings(scheduler, r):
     data['date'] = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
     data['temperature'] = get_average(temperatures)
     data['humidity'] = get_average(humidities)
+    data['sensor'] = 'DHT11-main'
     r.xadd(STREAM, data, maxlen=MAXLEN)
     
 
