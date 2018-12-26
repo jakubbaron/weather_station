@@ -7,7 +7,6 @@ import {
   ChartContainer,
   ChartRow,
   YAxis,
-  BarChart,
   styler,
   LineChart,
 } from "react-timeseries-charts";
@@ -56,11 +55,6 @@ class SimpleChart extends React.Component {
         { key: "humidity", color: "#9467bd" },
     ]);
 
-    const scheme = {
-        temp: "#CA4040",
-        humidity: "#9467bd",
-    };
-
     return (
       <div>
       <Websocket url='ws://192.168.0.123:5679/' onMessage={this.handleData.bind(this)}/>
@@ -89,7 +83,7 @@ class SimpleChart extends React.Component {
 	    </Charts>
 	    <YAxis
 		id="humidity"
-		label="%"
+		label="Humidity %"
 		labelOffset={5}
 		style={style.axisStyle("humidity")}
 		min={20}
@@ -106,22 +100,3 @@ class SimpleChart extends React.Component {
 }
 
 export default SimpleChart;
-/*
-      <Resizable>
-        <ChartContainer timeRange={tempSeries.range()}>
-	  <ChartRow height="150" >
-	    <YAxis id="temp"
-		   label="Temperature (°C)"
-		   labelOffset={-5}/>
-	    <Charts>
-		<LineChart
-			axis="temp"
-			series={tempSeries}
-			columns={["temp"]}
-			style={style} />
-	    </Charts>
-	  </ChartRow>
-        </ChartContainer>
-      </Resizable>
-
-*/
