@@ -6,7 +6,7 @@ import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
-var ws = new WebSocket("ws://127.0.0.1:5678/"),
+var ws = new WebSocket("ws://192.168.0.123:5678/"),
     messages = document.createElement('ul');
 ws.onmessage = function (event) {
     var messages = document.getElementsByTagName('ul')[0],
