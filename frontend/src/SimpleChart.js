@@ -1,6 +1,6 @@
 import React from "react";
 import Websocket from 'react-websocket';
-import { TimeSeries, Index } from "pondjs";
+import { TimeRange, TimeSeries, Index } from "pondjs";
 import {
   Resizable,
   Charts,
@@ -9,15 +9,32 @@ import {
   YAxis,
   styler,
   LineChart,
+  MultiBrush,
 } from "react-timeseries-charts";
+
+
+// 50.2863° N, 19.1041° E
 
 class SimpleChart extends React.Component {
   constructor(props) {
     super(props);
+    this.SunCalc = require('suncalc');
+    let day = new Date();
+    this.times = this.SunCalc.getTimes(day, 50.2863, 19.1041);
+    day.setDate(day.getDate() - 1);
+    this.yesterday_times = this.SunCalc.getTimes(day, 50.2863, 19.1041);
+    day.setDate(day.getDate() + 2);
+    this.tomorrow_times= this.SunCalc.getTimes(day, 50.2863, 19.1041);
+
     this.state = {
 	temperatures: [[Date.now(), 25]],
 	humidities: [[Date.now(), 35]],
+	dayTimes: [
+		new TimeRange(this.yesterday_times.sunset, this.times.sunrise),
+		new TimeRange(this.times.sunset, this.tomorrow_times.sunrise)],
+	selected: 1,
     };
+	console.log(this.state.dayTimes);
   }
 
   handleData(data) {
@@ -80,6 +97,12 @@ class SimpleChart extends React.Component {
 			series={humiditySeries}
 			columns={["humidity"]}
 			style={style} />
+		<MultiBrush
+                    timeRanges={this.state.dayTimes}
+		    style={i => {
+                          return { fill: "#cccccc" };
+		}}
+                />
 	    </Charts>
 	    <YAxis
 		id="humidity"

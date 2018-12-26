@@ -8,7 +8,8 @@
     "react-dom": "^16.7.0",
     "react-scripts": "2.1.2",
     "react-timeseries-charts": "^0.15.5",
-    "react-websocket": "^2.0.0"
+    "react-websocket": "^2.0.0",
+    "suncalc": "^1.8.0"
   },
   "scripts": {
     "start": "react-scripts start",
