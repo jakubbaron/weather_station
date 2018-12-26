@@ -13,7 +13,7 @@ import {
 } from "react-timeseries-charts";
 
 
-// 50.2863° N, 19.1041° E
+// Sosnowiec 50.2863° N, 19.1041° E
 
 class SimpleChart extends React.Component {
   constructor(props) {
@@ -32,9 +32,7 @@ class SimpleChart extends React.Component {
 	dayTimes: [
 		new TimeRange(this.yesterday_times.sunset, this.times.sunrise),
 		new TimeRange(this.times.sunset, this.tomorrow_times.sunrise)],
-	selected: 1,
     };
-	console.log(this.state.dayTimes);
   }
 
   handleData(data) {
