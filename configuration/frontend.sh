@@ -5,3 +5,4 @@ sudo cp -R * /usr/local/
 node -v
 npm -v
 #npx create-react-app frontend
+#npm install --save react-websocket
