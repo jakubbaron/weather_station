@@ -19,16 +19,18 @@ class SimpleChart extends React.Component {
   constructor(props) {
     super(props);
     this.SunCalc = require('suncalc');
-    let day = new Date();
-    this.times = this.SunCalc.getTimes(day, 50.2863, 19.1041);
-    day.setDate(day.getDate() - 1);
-    this.yesterday_times = this.SunCalc.getTimes(day, 50.2863, 19.1041);
-    day.setDate(day.getDate() + 2);
-    this.tomorrow_times= this.SunCalc.getTimes(day, 50.2863, 19.1041);
+    let today = new Date();
+    this.times = this.SunCalc.getTimes(today, 50.2863, 19.1041);
+    let yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    this.yesterday_times = this.SunCalc.getTimes(yesterday, 50.2863, 19.1041);
+    let tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    this.tomorrow_times= this.SunCalc.getTimes(tomorrow, 50.2863, 19.1041);
 
     this.state = {
-	temperatures: [[Date.now(), 25]],
-	humidities: [[Date.now(), 35]],
+	temperatures: [[yesterday, 25], [today, 25]],
+	humidities: [[yesterday, 35], [today, 35]],
 	dayTimes: [
 		new TimeRange(this.yesterday_times.sunset, this.times.sunrise),
 		new TimeRange(this.times.sunset, this.tomorrow_times.sunrise)],
@@ -64,7 +66,6 @@ class SimpleChart extends React.Component {
 	])
     });
 
-
     const style = styler([
         { key: "temp", color: "#CA4040" },
         { key: "humidity", color: "#9467bd" },
@@ -85,22 +86,22 @@ class SimpleChart extends React.Component {
 />
 			
 	    <Charts>
-		<LineChart
-			axis="temp"
-			series={tempSeries}
-			columns={["temp"]}
-			style={style} />
-		<LineChart
-			axis="humidity"
-			series={humiditySeries}
-			columns={["humidity"]}
-			style={style} />
-		<MultiBrush
-                    timeRanges={this.state.dayTimes}
-		    style={i => {
-                          return { fill: "#cccccc" };
-		}}
-                />
+		  <LineChart
+		  	axis="temp"
+		  	series={tempSeries}
+		  	columns={["temp"]}
+		  	style={style} />
+		  <LineChart
+		  	axis="humidity"
+		  	series={humiditySeries}
+		  	columns={["humidity"]}
+		  	style={style} />
+		  <MultiBrush
+          timeRanges={this.state.dayTimes}
+		      style={i => {
+            return { fill: "#cccccc" };
+		      }}
+      />
 	    </Charts>
 	    <YAxis
 		id="humidity"
