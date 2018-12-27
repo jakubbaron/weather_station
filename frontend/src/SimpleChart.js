@@ -29,12 +29,24 @@ class SimpleChart extends React.Component {
     this.tomorrow_times= this.SunCalc.getTimes(tomorrow, 50.2863, 19.1041);
 
     this.state = {
-	temperatures: [[yesterday, 25], [today, 25]],
-	humidities: [[yesterday, 35], [today, 35]],
-	dayTimes: [
+	nightTimes: [
 		new TimeRange(this.yesterday_times.sunset, this.times.sunrise),
 		new TimeRange(this.times.sunset, this.tomorrow_times.sunrise)],
+	humiditySeries: this.getTimeSeries([[yesterday, 25], [today, 25]], 'humidities', 'humidity'),
+	tempSeries: this.getTimeSeries([[yesterday, 35], [today, 35]], 'temperatures', 'temp'),
     };
+  }
+
+  getTimeSeries(arr, series_name, column_name) {
+    const series = new TimeSeries({
+      name: series_name,
+      columns: ['index', column_name],
+      points: arr.map(([d, value]) => [
+    	Index.getIndexString("1m", new Date(d)),
+    	value	
+      ])
+    });
+    return series;
   }
 
   handleData(data) {
@@ -44,27 +56,11 @@ class SimpleChart extends React.Component {
 	let temperatures = [];
 	result.map((entry) => humidities.push([entry.date, entry.humidity]));
 	result.map((entry) => temperatures.push([entry.date, entry.temperature]));
-	this.setState({ temperatures: temperatures,
-			humidities: humidities});
+
+	this.setState({ tempSeries: this.getTimeSeries(temperatures, 'temperatures', 'temp'),
+			humiditySeries: this.getTimeSeries(humidities, 'humidities', 'humidity') });
   }
   render() {
-    const tempSeries = new TimeSeries({
-	name: 'temperatures',
-	columns: ['index', 'temp'],
-	points: this.state.temperatures.map(([d, temp]) => [
-		Index.getIndexString("1m", new Date(d)),
-		temp	
-	])
-    });
-
-    const humiditySeries = new TimeSeries({
-	name: 'temperatures',
-	columns: ['index', 'humidity'],
-	points: this.state.humidities.map(([d, humidity]) => [
-		Index.getIndexString("1m", new Date(d)),
-		humidity
-	])
-    });
 
     const style = styler([
         { key: "temp", color: "#CA4040" },
@@ -75,7 +71,7 @@ class SimpleChart extends React.Component {
       <div>
       <Websocket url='ws://192.168.0.123:5679/' onMessage={this.handleData.bind(this)}/>
       <Resizable>
-        <ChartContainer timeRange={tempSeries.range()}>
+        <ChartContainer timeRange={this.state.tempSeries.range()}>
 	  <ChartRow height="350" >
 	    <YAxis id="temp"
 		   label="Temperature (°C)"
@@ -88,16 +84,16 @@ class SimpleChart extends React.Component {
 	    <Charts>
 		  <LineChart
 		  	axis="temp"
-		  	series={tempSeries}
+		  	series={this.state.tempSeries}
 		  	columns={["temp"]}
 		  	style={style} />
 		  <LineChart
 		  	axis="humidity"
-		  	series={humiditySeries}
+		  	series={this.state.humiditySeries}
 		  	columns={["humidity"]}
 		  	style={style} />
 		  <MultiBrush
-          timeRanges={this.state.dayTimes}
+          timeRanges={this.state.nightTimes}
 		      style={i => {
             return { fill: "#cccccc" };
 		      }}
