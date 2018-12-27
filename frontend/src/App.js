@@ -1,6 +1,6 @@
 import React from "react";
 import SimpleChart from "./SimpleChart"
-import Thermometer from "./Thermometer"
+import HumidityAndThermometer from "./HumidityAndThermometer"
 
 class App extends React.Component {
   state = {};
@@ -9,7 +9,7 @@ class App extends React.Component {
     return (
       <div className="p-3 m-4 border border-muted">
         <SimpleChart />
-        <Thermometer />
+        <HumidityAndThermometer />
       </div>
     );
   }
