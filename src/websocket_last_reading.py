@@ -10,7 +10,7 @@ import redis
 import functools
 import json
 
-STREAM = {"DHT11-stream": "$"}
+STREAM = "DHT11-stream"
 
 def get_redis_passwd():
     try:
