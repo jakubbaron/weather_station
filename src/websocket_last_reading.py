@@ -23,18 +23,16 @@ def get_redis_passwd():
 
 
 async def handler(websocket, path, redis_connection):
-  last_reading = redis_connection.xread(STREAM, block=0)
-  stream_name = last_reading[0][0]
-  time_point, read_data = last_reading[0][1][0]
+  last_reading = r.xrevrange(STREAM, count=1, max=u'+', min=u'-')
+  time_point, read_data = last_reading[0]
   time_point = time_point.decode('utf-8')
   str_data = {}
   for k,v in read_data.items():
       str_data[k.decode('utf-8')] = v.decode('utf-8')
-  sensor_data = {"stream_name" : stream_name,
+  sensor_data = {"stream_name" : STREAM,
                  "data": str_data,
                  "time_point": time_point }
   json_data = json.dumps(sensor_data)
-  print(str(json_data))
   await websocket.send(json_data)
 
 r=redis.StrictRedis(host='localhost', port=6379, db=0, password=get_redis_passwd(), socket_timeout=10000, connection_pool=None, charset='utf-8', errors='strict', unix_socket_path=None)
