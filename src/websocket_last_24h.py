@@ -9,6 +9,7 @@ import websockets
 import redis
 import functools
 import json
+import datetime
 
 STREAM = "DHT11-stream"
 
@@ -32,7 +33,7 @@ async def handler(websocket, path, redis_connection):
             str_data[k.decode('utf-8')] = v.decode('utf-8')
         time_point = item[0].decode('utf-8')
         sensor_data_arr.append(str_data)
-    sensor_data_arr.reverse()
+    sensor_data_arr = sorted(sensor_data_arr, key=lambda x: datetime.datetime.strptime(x['date'], '%Y-%m-%d %H:%M:%S'))
     json_data = json.dumps(sensor_data_arr)
     await websocket.send(json_data)
 
