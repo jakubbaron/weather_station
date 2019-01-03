@@ -20,7 +20,7 @@ class HumidityAndThermometer extends React.Component {
   render() {
     return (
       <div className="m-4 border border-muted">
-      <Websocket url='ws://192.168.0.123:5678/' onMessage={this.handleData.bind(this)}/>
+      <Websocket url='ws://192.168.1.224:5678/' onMessage={this.handleData.bind(this)}/>
 
       <div className="thermometer-container">
         <Thermometer

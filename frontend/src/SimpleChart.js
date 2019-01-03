@@ -69,7 +69,7 @@ class SimpleChart extends React.Component {
 
     return (
       <div>
-      <Websocket url='ws://192.168.0.123:5679/' onMessage={this.handleData.bind(this)}/>
+      <Websocket url='ws://192.168.1.224:5679/' onMessage={this.handleData.bind(this)}/>
       <Resizable>
         <ChartContainer timeRange={this.state.tempSeries.range()}>
 	  <ChartRow height="350" >
