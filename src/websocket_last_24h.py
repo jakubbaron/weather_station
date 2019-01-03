@@ -39,7 +39,7 @@ async def handler(websocket, path, redis_connection):
 r=redis.StrictRedis(host='localhost', port=6379, db=0, password=get_redis_passwd(), socket_timeout=10000, connection_pool=None, charset='utf-8', errors='strict', unix_socket_path=None)
 
 bound_handler = functools.partial(handler, redis_connection=r)
-start_server = websockets.serve(bound_handler, host='192.168.0.123', port=5679)
+start_server = websockets.serve(bound_handler, host='192.168.1.224', port=5679)
 
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
