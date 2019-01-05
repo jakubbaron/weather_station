@@ -77,7 +77,7 @@ class SimpleChart extends React.Component {
 		   label="Temperature (°C)"
 		   labelOffset={-5}
 		   min={18}
-		   max={28}
+		   max={30}
 		   style={style.axisStyle("temp")}
 />
 			
@@ -104,8 +104,8 @@ class SimpleChart extends React.Component {
 		label="Humidity %"
 		labelOffset={5}
 		style={style.axisStyle("humidity")}
-		min={20}
-		max={40}
+		min={25}
+		max={50}
 		type="linear"
 		format=",.1f"
 	    />
