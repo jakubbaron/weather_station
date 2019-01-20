@@ -13,7 +13,7 @@ SENSOR = Adafruit_DHT.DHT11
 GPIO = 4
 MEASUREMENTS_COUNT = 50
 STREAM = "DHT11-stream"
-MAXLEN = 150000
+MAXLEN = 0#150000
 
 SCHEDULER = sched.scheduler(time.time, time.sleep)
 
