@@ -13,7 +13,6 @@ SENSOR = Adafruit_DHT.DHT11
 GPIO = 4
 MEASUREMENTS_COUNT = 50
 STREAM = "DHT11-stream"
-MAXLEN = 0#150000
 
 SCHEDULER = sched.scheduler(time.time, time.sleep)
 
@@ -45,7 +44,7 @@ def get_readings(scheduler, r):
     data['temperature'] = get_average(temperatures)
     data['humidity'] = get_average(humidities)
     data['sensor'] = 'DHT11-main'
-    r.xadd(STREAM, data, maxlen=MAXLEN)
+    r.xadd(STREAM, data)
     
 
 if __name__ == '__main__':
